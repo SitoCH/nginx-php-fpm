@@ -67,11 +67,11 @@ sed -i -e "s/pm.start_servers = 2/pm.start_servers = 3/g" ${fpm_conf} && \
 sed -i -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g" ${fpm_conf} && \
 sed -i -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g" ${fpm_conf} && \
 sed -i -e "s/pm.max_requests = 500/pm.max_requests = 200/g" ${fpm_conf} && \
-sed -i -e "s/user = nobody/user = nginx/g" ${fpm_conf} && \
-sed -i -e "s/group = nobody/group = nginx/g" ${fpm_conf} && \
+sed -i -e "s/user = nobody/user = www-data/g" ${fpm_conf} && \
+sed -i -e "s/group = nobody/group = www-data/g" ${fpm_conf} && \
 sed -i -e "s/;listen.mode = 0660/listen.mode = 0666/g" ${fpm_conf} && \
-sed -i -e "s/;listen.owner = nobody/listen.owner = nginx/g" ${fpm_conf} && \
-sed -i -e "s/;listen.group = nobody/listen.group = nginx/g" ${fpm_conf} && \
+sed -i -e "s/;listen.owner = nobody/listen.owner = www-data/g" ${fpm_conf} && \
+sed -i -e "s/;listen.group = nobody/listen.group = www-data/g" ${fpm_conf} && \
 sed -i -e "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g" ${fpm_conf} &&\
 ln -s /etc/php5/php.ini /etc/php5/conf.d/php.ini && \
 find /etc/php5/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;
