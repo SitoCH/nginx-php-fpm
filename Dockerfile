@@ -1,6 +1,6 @@
 FROM alpine:3.4
 
-MAINTAINER ngineered <support@ngineered.co.uk>
+MAINTAINER SitoCH <sito@grignola.ch>
 
 ENV php_conf /etc/php5/php.ini 
 ENV fpm_conf /etc/php5/php-fpm.conf
@@ -60,9 +60,10 @@ ADD conf/nginx-site.conf /etc/nginx/sites-available/default.conf
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
 # add www-data group / user
-RUN groupadd www-data -g 33 && \
-useradd -u 33  --no-create-home --system --no-user-group www-data && \
-usermod -g www-data www-data
+RUN deluser xfs && \
+delgroup www-data && \
+addgroup www-data -g 33 && \
+adduser -u 33 -g 33  -H -S www-data
 
 # tweak php-fpm config
 RUN sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" ${php_conf} && \
