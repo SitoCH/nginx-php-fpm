@@ -90,7 +90,7 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
 fi
 
 # Always chown webroot for better mounting
-chown -Rf nginx.nginx /var/www/html
+chown -Rf www-data.www-data /var/www/html
 
 # Run custom scripts
 if [[ "$RUN_SCRIPTS" == "1" ]] ; then
