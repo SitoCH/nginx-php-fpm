@@ -13,7 +13,10 @@ fi
 
 # Set custom webroot
 if [ ! -z "$WEBROOT" ]; then
- sed -i "s#root /var/www/html;#root ${WEBROOT};#g" /etc/nginx/sites-available/default.conf
+  webroot=$WEBROOT
+  sed -i "s#root /var/www/html;#root ${webroot};#g" /etc/nginx/sites-available/default.conf
+else
+  webroot=/var/www/html
 fi
 
 # Setup git variables
@@ -30,14 +33,31 @@ if [ ! -d "/var/www/html/.git" ]; then
  # Pull down code from git for our site!
  if [ ! -z "$GIT_REPO" ]; then
    # Remove the test index file
-   rm -Rf /var/www/html/index.php
+   rm -Rf /var/www/html/*
    if [ ! -z "$GIT_BRANCH" ]; then
-     git clone -b $GIT_BRANCH $GIT_REPO /var/www/html/
+     if [ -z "$GIT_USERNAME" ] && [ -z "$GIT_PERSONAL_TOKEN" ]; then
+       git clone -b $GIT_BRANCH $GIT_REPO /var/www/html/
+     else
+       git clone -b ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PERSONAL_TOKEN}@${GIT_REPO} /var/www/html
+     fi
    else
-     git clone $GIT_REPO /var/www/html/
+     if [ -z "$GIT_USERNAME" ] && [ -z "$GIT_PERSONAL_TOKEN" ]; then
+       git clone $GIT_REPO /var/www/html/
+     else
+       git clone https://${GIT_USERNAME}:${GIT_PERSONAL_TOKEN}@${GIT_REPO} /var/www/html
+     fi
    fi
    chown -Rf nginx.nginx /var/www/html
  fi
+fi
+
+# Enable custom nginx config files if they exist
+if [ -f /var/www/html/conf/nginx/nginx-site.conf ]; then
+  cp /var/www/html/conf/nginx/nginx-site.conf /etc/nginx/sites-available/default.conf
+fi
+
+if [ -f /var/www/html/conf/nginx/nginx-site-ssl.conf ]; then
+  cp /var/www/html/conf/nginx/nginx-site-ssl.conf /etc/nginx/sites-available/default-ssl.conf
 fi
 
 # Display PHP error's or not
@@ -69,17 +89,19 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
  sed -i "s/upload_max_filesize = 100M/upload_max_filesize= ${PHP_UPLOAD_MAX_FILESIZE}M/g" /etc/php5/conf.d/php.ini
 fi
 
-# Very dirty hack to replace variables in code with ENVIRONMENT values
-if [[ "$TEMPLATE_NGINX_HTML" == "1" ]] ; then
-  for i in $(env)
-  do
-    variable=$(echo "$i" | cut -d'=' -f1)
-    value=$(echo "$i" | cut -d'=' -f2)
-    if [[ "$variable" != '%s' ]] ; then
-      replace='\$\$_'${variable}'_\$\$'
-      find /var/www/html -type f -exec sed -i -e 's/'${replace}'/'${value}'/g' {} \;
-    fi
-  done
+# Always chown webroot for better mounting
+chown -Rf nginx.nginx /var/www/html
+
+# Run custom scripts
+if [[ "$RUN_SCRIPTS" == "1" ]] ; then
+  if [ -d "/var/www/html/scripts/" ]; then
+    # make scripts executable incase they aren't
+    chmod -Rf 750 /var/www/html/scripts/*
+    # run scripts in number order
+    for i in `ls /var/www/html/scripts/`; do /var/www/html/scripts/$i ; done
+  else
+    echo "Can't find script directory"
+  fi
 fi
 
 # Start supervisord and services
