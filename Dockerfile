@@ -35,6 +35,7 @@ RUN apk add --no-cache bash \
     php7-phar \
     php7-soap \
     php7-dom \
+    php7-simplexml \
     php7-mbstring \
     python \
     python-dev \
