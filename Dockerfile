@@ -33,6 +33,7 @@ RUN apk add --no-cache bash \
     php7-iconv \
     php7-json \
     php7-phar \
+    php7-fileinfo \
     php7-soap \
     php7-dom \
     php7-simplexml \
