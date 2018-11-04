@@ -93,8 +93,6 @@ RUN sed -i \
         -e "s/variables_order = \"GPCS\"/variables_order = \"EGPCS\"/g" \
         -e "s/short_open_tag = Off/short_open_tag = On/g" \
         ${php_conf} && \
-    sed -i '/^[ \t]*post_max_size=/{h;s/=.*/=8M/};${x;/^$/{s//post_max_size=100M/;H};x}' ${fpm_conf} && \
-    sed -i '/^[ \t]*upload_max_filesize=/{h;s/=.*/=2M/};${x;/^$/{s//upload_max_filesize=100M/;H};x}' ${fpm_conf} && \
     sed -i \
         -e "s/short_open_tag = Off/short_open_tag = On/g" \
         -e "s/;daemonize\s*=\s*yes/daemonize = no/g" \
