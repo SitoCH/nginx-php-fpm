@@ -97,6 +97,8 @@ RUN sed -i \
         -e "s/short_open_tag = Off/short_open_tag = On/g" \
         -e "s/;daemonize\s*=\s*yes/daemonize = no/g" \
         -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
+        -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 100M/g" \
+        -e "s/post_max_size\s*=\s*8M/post_max_size = 100M/g" \
         -e "s/pm.max_children = 4/pm.max_children = 4/g" \
         -e "s/pm.start_servers = 2/pm.start_servers = 3/g" \
         -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g" \
