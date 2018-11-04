@@ -27,6 +27,7 @@ RUN apk add --no-cache bash \
     php7-sqlite3 \
     php7-pgsql \
     php7-xml \
+    php7-exif \
     php7-xsl \
     php7-curl \
     php7-openssl \
