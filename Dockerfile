@@ -93,12 +93,12 @@ RUN sed -i \
         -e "s/variables_order = \"GPCS\"/variables_order = \"EGPCS\"/g" \
         -e "s/short_open_tag = Off/short_open_tag = On/g" \
         ${php_conf} && \
+    sed -i '/^[ \t]*post_max_size=/{h;s/=.*/=8M/};${x;/^$/{s//post_max_size=100M/;H};x}' ${fpm_conf} && \
+    sed -i '/^[ \t]*upload_max_filesize=/{h;s/=.*/=2M/};${x;/^$/{s//upload_max_filesize=100M/;H};x}' ${fpm_conf} && \
     sed -i \
         -e "s/short_open_tag = Off/short_open_tag = On/g" \
         -e "s/;daemonize\s*=\s*yes/daemonize = no/g" \
         -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
-        -e "/^[ \t]*upload_max_filesize=/{h;s/=.*/=2M/};${x;/^$/{s//upload_max_filesize=100M/;H};x}" \
-        -e "/^[ \t]*post_max_size=/{h;s/=.*/=8M/};${x;/^$/{s//post_max_size=100M/;H};x}" \
         -e "s/pm.max_children = 4/pm.max_children = 4/g" \
         -e "s/pm.start_servers = 2/pm.start_servers = 3/g" \
         -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g" \
