@@ -111,6 +111,8 @@ RUN sed -i \
         -e "s/;listen.group = nobody/listen.group = www-data/g" \
         -e "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g" \
         -e "s/^;clear_env = no$/clear_env = no/" \
+        -e "upload_max_filesize = 100M" \
+        -e "post_max_size = 100M" \
         ${fpm_conf} && \
     sed -i \
         -e "s/short_open_tag = Off/short_open_tag = On/g" \
