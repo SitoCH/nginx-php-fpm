@@ -23,6 +23,7 @@ RUN apk add --no-cache bash \
     php7-zlib \
     php7-gd \
     php7-intl \
+    php7-tokenizer \
     php7-memcached \
     php7-sqlite3 \
     php7-pgsql \
