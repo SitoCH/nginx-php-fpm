@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine3.11
 
 MAINTAINER SitoCH <sito@grignola.ch>
 
@@ -26,6 +26,7 @@ RUN apk add --no-cache bash \
     php7-tokenizer \
     php7-memcached \
     php7-sqlite3 \
+    php7-zip \
     php7-pgsql \
     php7-xml \
     php7-exif \
