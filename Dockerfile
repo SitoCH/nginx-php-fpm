@@ -1,4 +1,4 @@
-FROM alpine3.11
+FROM alpine:3.11
 
 MAINTAINER SitoCH <sito@grignola.ch>
 
